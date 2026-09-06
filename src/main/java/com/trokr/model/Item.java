@@ -15,6 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import com.trokr.model.state.*;
 
 /**
  * Um item ou habilidade oferecido por um usuário para troca.
@@ -32,6 +33,8 @@ import org.hibernate.annotations.CreationTimestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Item {
+
+    private EstadoItem estadoAtual = new EstadoRascunho();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,4 +56,9 @@ public class Item {
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime dataCriacao;
+
+    void mudarEstadoPara(EstadoItem novoEstado) {
+        this.estadoAtual = novoEstado;
+    }
+
 }
