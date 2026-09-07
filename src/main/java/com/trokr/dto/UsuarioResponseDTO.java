@@ -12,6 +12,7 @@ public record UsuarioResponseDTO(
         Long id,
         String nome,
         String email,
+        String cidade,
         LocalDateTime dataCriacao
 ) {
 
@@ -19,6 +20,7 @@ public record UsuarioResponseDTO(
         return new UsuarioResponseDTO(
                 usuario.getId(),
                 usuario.getNome(),
+                usuario.getCidade(),
                 usuario.getEmail(),
                 usuario.getDataCriacao()
         );

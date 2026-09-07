@@ -12,6 +12,7 @@ public record ItemResponseDTO(
         Long id,
         String titulo,
         String descricao,
+        String tipo,
         Long usuarioId,
         String usuarioNome,
         LocalDateTime dataCriacao
@@ -22,6 +23,7 @@ public record ItemResponseDTO(
                 item.getId(),
                 item.getTitulo(),
                 item.getDescricao(),
+                item.getTipo(),
                 item.getUsuarioProprietario().getId(),
                 item.getUsuarioProprietario().getNome(),
                 item.getDataCriacao()
