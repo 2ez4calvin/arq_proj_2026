@@ -1,0 +1,153 @@
+@startuml
+
+class Usuario {
+	id: int
+	nome: String
+	email: String
+	cidade: String
+	dataCriacao: LocalDateTime
+	--
+	Usuario()
+	Usuario(String, String, String)
+	--
+	getId(): int
+	setId(int): void
+	getNome(): String
+	setNome(String): void
+	getEmail(): String
+	setEmail(String): void
+	getCidade(): String
+	setCidade(String): void
+	getDataCriacao(): LocalDateTime
+	setDataCriacao(LocalDateTime): void
+}
+
+class Item {
+	titulo: String
+	descrição: String
+	tipo: String
+	id: int
+	usuarioProprietario: Usuario
+	dataCriacao: LocalDateTime
+	--
+	Item()
+	Item(String, String, String, Usuario)
+	--
+	getId(): int
+	setId(int): void
+	getTitulo(): String
+	setTitulo(String): void
+	getDescricao(): String
+	setDescricao(String): void
+	getTipo(): String
+	setTipo(String): void
+	getUsuarioProprietario(): Usuario
+	setUsuarioProprietario(Usuario): void
+	getDataCriacao(): LocalDateTime
+	setDataCriacao(LocalDateTime): void
+}
+
+class Avaliacao {
+	id: int
+	nota: int
+	dataCriacao: LocalDateTime
+	descricao: String
+	proposta: Proposta
+	usuarioAlvo: Usuario
+	usuarioAutor: Usuario
+	--
+	Avaliacao()
+	Avaliacao(int, String, Proposta, Usuario, Usuario)
+	--
+	getId(): int
+	setId(int): void
+	getNota(): int
+	setNota(int): void
+	getDataCriacao(): LocalDateTime
+	setDataCriacao(LocalDateTime): void
+	getDescricao(): String
+	setDescricao(String): void
+	getProposta(): Proposta
+	setProposta(Proposta): void
+	getUsuarioAlvo(): Usuario
+	setUsuarioAlvo(Usuario): void
+	getUsuarioAutor(): Usuario
+	setUsuarioAutor(Usuario): void
+}
+
+class Proposta {
+	id: int
+	descricao: String
+	status: Status
+	usuario: Usuario
+	item: Item
+	propostaPai: Proposta
+	--
+	Proposta()
+	Proposta(String, Usuario, Item)
+	Proposta(String, Usuario, Item, Proposta)
+	--
+	getId(): int
+	setId(int): void
+	getDescricao(): String
+	setDescricao(String): void
+	getStatus(): Status
+	setStatus(Status): void
+	getUsuario(): Usuario
+	setUsuario(Usuario): void
+	getItem(): Item
+	setItem(Item): void
+	getPropostaPai(): Proposta
+	setPropostaPai(Proposta): void
+}
+
+class Historico {
+	id: int
+	proposta: Proposta
+	motivo: String
+	statusAnterior: Status
+	statusNovo: Status
+	data: LocalDateTime
+	usuario: Usuario
+	--
+	Historico()
+	Historico(Proposta, String, Status, Status, Usuario)
+	--
+	getId(): int
+	setId(int): void
+	getProposta(): Proposta
+	setProposta(Proposta): void
+	getMotivo(): String
+	setMotivo(String): void
+	getStatusAnterior(): Status
+	setStatusAnterior(Status): void
+	getStatusNovo(): Status
+	setStatusNovo(Status): void
+	getData(): LocalDateTime
+	setData(LocalDateTime): void
+	getUsuario(): Usuario
+	setUsuario(Usuario): void
+}
+
+enum Status {
+	RASCUNHO
+	HOMOLOGACAO
+	ATIVA
+	NEGOCIADO
+	FINALIZADO
+	CANCELADO
+	EM_ANALISE
+	RECUSADO
+}
+
+' Relacionamentos
+Usuario "1" --> "*" Item : proprietário
+Usuario "1" --> "*" Proposta : propõe
+Usuario "1" --> "*" Avaliacao : autor
+Usuario "1" --> "*" Avaliacao : alvo
+Item "1" --> "*" Proposta : referencia
+Proposta "0..1" --> "*" Proposta : Contraproposta
+Proposta "1" --> "*" Historico : gera
+Proposta "1" --> "*" Avaliacao : recebe
+
+@enduml
