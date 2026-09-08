@@ -1,0 +1,23 @@
+@startuml
+
+[*] --> Rascunho
+
+Rascunho --> Homologacao : submeter
+Rascunho --> Cancelado_Raiz : cancelar
+
+Homologacao --> Ativa : aprovada
+Homologacao --> Cancelado_Raiz : cancelar
+
+Ativa --> Negociado_Raiz : receber contraproposta
+Ativa --> Cancelado_Raiz : cancelar
+Ativa --> Rascunho : editar
+
+Negociado_Raiz --> Finalizado : troca realizada
+Negociado_Raiz --> Recusado : Uma parte desiste na negociação
+Negociado_Raiz --> Cancelado_Raiz : cancelar
+
+Finalizado --> [*]
+Recusado --> Ativa : Negociação falhou, volta para ativa
+Cancelado_Raiz --> [*]
+
+@enduml

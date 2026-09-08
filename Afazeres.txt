@@ -1,0 +1,11 @@
+Terminar os estados (Verificar a possibilidade de retornar o item, ao invés de VOID e verificar uma maneira de representar o fim do ciclo)
+Fazer o controller, service e model, DTO de proposta e contraproposta. FAzer uma interface de EstadoContraproposta e Contraproposta, colocar todos os estados nas interfaces. Caso o estado não seja possível retornar uma exception. Separar dentro de State, uma proposta e uma contraproposta, com a interface EstadoProposta e outra pasta interface EstadoCOntraProposta. Fazer um collection_postman para facilitar no request
+
+Arquivos de mesmo nome, mas retornando o enum diferente, de acordo com proposta ou contraporposta.
+
+Utilizar o isPodeMudar no controller para fazer a verificação antes de entrar nos states "de fato". Caso for estado terminal o controller trata isso.
+
+Controller -> service -> repositorio-> DTO - De cima pra baixo
+
+Controller de proposta - Request Mapping(/propostas), lembrando que proposta e contra proposta são o mesmo model, fazer um auto relacionamento . Caso tenha é contra
+, caso não tenha é proposta

@@ -1,0 +1,18 @@
+@startuml
+
+[*] --> Rascunho
+
+Rascunho --> Em_Analise : submeter
+Rascunho --> Cancelado_Contra : Contraproposta cancelada
+
+Em_Analise --> Negociado_Contra : proposta aceite
+Em_Analise --> Cancelado_Contra : Outra proposta aceita e finalizada
+
+Negociado_Contra --> Finalizado_Contra : Troca Concluida
+Negociado_Contra --> Recusado : recusar
+
+Finalizado_Contra --> [*]
+Recusado --> [*]
+Cancelado_Contra --> [*]
+
+@enduml
