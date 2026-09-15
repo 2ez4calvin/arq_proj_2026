@@ -82,6 +82,7 @@ class Proposta {
 	usuario: Usuario
 	item: Item
 	propostaPai: Proposta
+	dataCriacao: LocalDateTime
 	--
 	Proposta()
 	Proposta(String, Usuario, Item)
@@ -99,6 +100,8 @@ class Proposta {
 	setItem(Item): void
 	getPropostaPai(): Proposta
 	setPropostaPai(Proposta): void
+	getDataCriacao(): LocalDateTime
+	setDataCriacao(LocalDateTime): void
 }
 
 class Historico {
@@ -145,7 +148,7 @@ Usuario "1" --> "*" Item : proprietário
 Usuario "1" --> "*" Proposta : propõe
 Usuario "1" --> "*" Avaliacao : autor
 Usuario "1" --> "*" Avaliacao : alvo
-Item "1" --> "*" Proposta : referencia
+Item "1" --> "1" Proposta : referencia
 Proposta "0..1" --> "*" Proposta : Contraproposta
 Proposta "1" --> "*" Historico : gera
 Proposta "1" --> "*" Avaliacao : recebe

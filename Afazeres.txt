@@ -16,6 +16,6 @@ Ajustar Diagrama para inserção do caso de contraproposta, de em_analise para r
 
 Fazer enum de Status Avaliação (Pendente, Avaliada)
 
-Criar entidade de avaliação
+Criar entidade de avaliação (controller, DTO, Repository, service)
 
 Listeners do slide 
