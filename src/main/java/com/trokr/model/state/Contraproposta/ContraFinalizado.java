@@ -1,21 +1,15 @@
-package com.trokr.model.state.Proposta;
+package com.trokr.model.state.Contraproposta;
 
-import com.trokr.model.Item;
-
-public class EstadoFinalizado {
+public class ContraFinalizado implements EstadoContraproposta{
 
     @Override
     public void irParaRascunho(Item item) {
-        throw new IllegalStateException("Transição Inválida!");
+        throw new IllegalStateException("Transição Inválida");
     }
 
     @Override
-    public void irParaHomologacao(Item item) {
-        throw new IllegalStateException("Transição Inválida!");
-    }
+    public void irParaEmAnalise(Item item) {
 
-    @Override
-    public void irParaAtiva(Item item) {
         throw new IllegalStateException("Transição Inválida!");
     }
 
@@ -26,7 +20,12 @@ public class EstadoFinalizado {
 
     @Override
     public void irParaFinalizado(Item item) {
-        throw new IllegalStateException("Já está como Finalizado. Transição inválida!");
+        throw new IllegalStateException("Já está como Finalizado. Transição inválida");
+    }
+
+    @Override
+    public void irParaRecusado(Item item) {
+        throw new IllegalStateException("Transição Inválida!");
     }
 
     @Override
@@ -35,7 +34,7 @@ public class EstadoFinalizado {
     }
 
     @Override
-    public boolean isPodeMudar(){
+    public boolean isPodeMudar() {
         return false;
     }
 

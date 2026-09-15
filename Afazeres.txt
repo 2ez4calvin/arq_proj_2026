@@ -9,3 +9,5 @@ Controller -> service -> repositorio-> DTO - De cima pra baixo
 
 Controller de proposta - Request Mapping(/propostas), lembrando que proposta e contra proposta são o mesmo model, fazer um auto relacionamento . Caso tenha é contra
 , caso não tenha é proposta
+
+Ajeitar Diagrama para inserção do caso de contraproposta, de em_analise para rascunho.

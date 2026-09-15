@@ -15,4 +15,6 @@ public interface EstadoContraproposta {
     void irParaRecusado(Item item);
 
     void irParaCancelado(Item item);
+
+    boolean isPodeMudar();
 }

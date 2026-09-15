@@ -1,22 +1,19 @@
-package com.trokr.model.state.Proposta;
+package com.trokr.model.state.Contraproposta;
 
 import com.trokr.model.Item;
 
-public class EstadoHomologacao implements EstadoProposta {
+public class ContraRascunho implements EstadoContraproposta {
 
     @Override
     public void irParaRascunho(Item item) {
-        item.mudarEstadoPara(new EstadoRascunho());
+        throw new IllegalStateException("Já está como rascunho. Transição inválida");
     }
 
     @Override
-    public void irParaHomologacao(Item item) {
-        throw new IllegalStateException("Já está como homologação. Transição inválida!");
-    }
+    public void irParaEmAnalise(Item item) {
 
-    @Override
-    public void irParaAtiva(Item item) {
-        item.mudarEstadoPara(new EstadoAtiva());
+        item.mudarEstadoPara(new ContraAnalise());
+
     }
 
     @Override
@@ -30,12 +27,18 @@ public class EstadoHomologacao implements EstadoProposta {
     }
 
     @Override
+    public void irParaRecusado(Item item) {
+        throw new IllegalStateException("Transição Inválida!");
+    }
+
+    @Override
     public void irParaCancelado(Item item) {
-        item.mudarEstadoPara(new EstadoCancelado());
+        item.mudarEstadoPara(new ContraCancelado());
     }
 
     @Override
     public boolean isPodeMudar() {
         return true;
     }
+
 }
