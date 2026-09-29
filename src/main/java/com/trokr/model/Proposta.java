@@ -58,10 +58,10 @@ public class Proposta {
     }
 
 
-    public static Proposta criarContraProposta(String descricao, Usuario autor, Proposta origem) {
-        Proposta contra = new Proposta(origem.titulo, descricao, origem.tipo, autor);
-        contra.propostaOrigem = origem;
-        origem.contrapropostas.add(contra);
+    public static Proposta criarContraProposta(String descricao, Usuario autor, Proposta pai) {
+        Proposta contra = new Proposta(pai.titulo, descricao, pai.tipo, autor);
+        contra.propostaPai = pai;
+        pai.contrapropostas.add(contra);
         return contra;
     }
 
