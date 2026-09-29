@@ -22,31 +22,6 @@ class Usuario {
 	setDataCriacao(LocalDateTime): void
 }
 
-class Item {
-	titulo: String
-	descrição: String
-	tipo: String
-	id: int
-	usuarioProprietario: Usuario
-	dataCriacao: LocalDateTime
-	--
-	Item()
-	Item(String, String, String, Usuario)
-	--
-	getId(): int
-	setId(int): void
-	getTitulo(): String
-	setTitulo(String): void
-	getDescricao(): String
-	setDescricao(String): void
-	getTipo(): String
-	setTipo(String): void
-	getUsuarioProprietario(): Usuario
-	setUsuarioProprietario(Usuario): void
-	getDataCriacao(): LocalDateTime
-	setDataCriacao(LocalDateTime): void
-}
-
 class Avaliacao {
 	id: int
 	nota: int
@@ -77,27 +52,30 @@ class Avaliacao {
 
 class Proposta {
 	id: int
+	titulo: String
 	descricao: String
+	tipo: String
 	status: Status
 	usuario: Usuario
-	item: Item
 	propostaPai: Proposta
 	dataCriacao: LocalDateTime
 	--
 	Proposta()
-	Proposta(String, Usuario, Item)
-	Proposta(String, Usuario, Item, Proposta)
+	Proposta(String, String, String, Usuario)
+	Proposta(String, String, String, Usuario, Proposta)
 	--
 	getId(): int
 	setId(int): void
+	getTitulo(): String
+	setTitulo(String): void
 	getDescricao(): String
 	setDescricao(String): void
+	getTipo(): String
+	setTipo(String): void
 	getStatus(): Status
 	setStatus(Status): void
 	getUsuario(): Usuario
 	setUsuario(Usuario): void
-	getItem(): Item
-	setItem(Item): void
 	getPropostaPai(): Proposta
 	setPropostaPai(Proposta): void
 	getDataCriacao(): LocalDateTime
@@ -144,11 +122,9 @@ enum Status {
 }
 
 ' Relacionamentos
-Usuario "1" --> "*" Item : proprietário
 Usuario "1" --> "*" Proposta : propõe
 Usuario "1" --> "*" Avaliacao : autor
 Usuario "1" --> "*" Avaliacao : alvo
-Item "1" --> "1" Proposta : referencia
 Proposta "0..1" --> "*" Proposta : Contraproposta
 Proposta "1" --> "*" Historico : gera
 Proposta "1" --> "*" Avaliacao : recebe

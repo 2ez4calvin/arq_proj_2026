@@ -1,20 +1,20 @@
 package com.trokr.model.state.Proposta;
 
-import com.trokr.model.Item;
+import com.trokr.model.Proposta;
 
 public interface EstadoProposta {
 
-    void irParaRascunho(Item item);
+    void irParaRascunho(Proposta Proposta);
 
-    void irParaHomologacao(Item item);
+    void irParaHomologacao(Proposta Proposta);
 
-    void irParaAtiva(Item item);
+    void irParaAtiva(Proposta Proposta);
 
-    void irParaNegociado(Item item);
+    void irParaNegociado(Proposta Proposta);
 
-    void irParaFinalizado(Item item);
+    void irParaFinalizado(Proposta Proposta);
 
-    void irParaCancelado(Item item);
+    void irParaCancelado(Proposta Proposta);
 
     boolean isPodeMudar();
 }

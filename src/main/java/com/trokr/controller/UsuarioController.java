@@ -1,6 +1,6 @@
 package com.trokr.controller;
 
-import com.trokr.dto.ItemResponseDTO;
+import com.trokr.dto.PropostaResponseDTO;
 import com.trokr.dto.UsuarioRequestDTO;
 import com.trokr.dto.UsuarioResponseDTO;
 import com.trokr.model.Usuario;

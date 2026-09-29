@@ -1,20 +1,20 @@
 package com.trokr.model.state.Contraproposta;
 
-import com.trokr.model.Item;
+import com.trokr.model.Proposta;
 
 public interface EstadoContraproposta {
 
-    void irParaRascunho(Item item);
+    void irParaRascunho(Proposta Proposta);
 
-    void irParaEmAnalise(Item item);
+    void irParaEmAnalise(Proposta Proposta);
 
-    void irParaNegociado(Item item);
+    void irParaNegociado(Proposta Proposta);
 
-    void irParaFinalizado(Item item);
+    void irParaFinalizado(Proposta Proposta);
 
-    void irParaRecusado(Item item);
+    void irParaRecusado(Proposta Proposta);
 
-    void irParaCancelado(Item item);
+    void irParaCancelado(Proposta Proposta);
 
     boolean isPodeMudar();
 }

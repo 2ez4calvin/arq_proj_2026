@@ -1,46 +1,75 @@
 package com.trokr.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import lombok.AllArgsConstructor;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+
 
 @Entity
 @Table(name = "proposta")
 @Getter
-@Setter
+@Setter /*Verificar depois, pois o setter deixa qualquer um fazer setStatus, 
+independente do status. Alterar a lógica de status da proposta*/
 @NoArgsConstructor
 @AllArgsConstructor
-public class Proposta {
 
+public class Proposta {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String descricao;
-
-    @Column(nullable = false, unique = true)
-    private String email;
-
-    @Enumerated(EnumType.ORDINAL)
-    @Column(nullable = false, name = "status")
-    private Status status = Status.RASCUNHO; 
+    private String titulo;
 
     @Column(nullable = false)
-     
+    private String descricao;
 
-    @CreationTimestamp
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime dataCriacao;
+    @Column(nullable = false)
+    private String tipo;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private StatusProposta status = StatusProposta.RASCUNHO;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private Usuario usuario;
+
+    // Auto-relacionamento que faz a contraproposta ser diferente
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "proposta_pai_id")
+    private Proposta propostaPai;
+
+    //Permite mapear todas as contrapropostas da proposta Pai
+    @OneToMany(mappedBy = "propostaPai")
+    private List<Proposta> contrapropostas = new ArrayList<>();
+
+
+    public Proposta(String titulo, String descricao, String tipo, Usuario usuario) {
+        this.titulo = titulo;
+        this.descricao = descricao;
+        this.tipo = tipo;
+        this.usuario = usuario;
+    }
+
+
+    public static Proposta criarContraProposta(String descricao, Usuario autor, Proposta origem) {
+        Proposta contra = new Proposta(origem.titulo, descricao, origem.tipo, autor);
+        contra.propostaOrigem = origem;
+        origem.contrapropostas.add(contra);
+        return contra;
+    }
+
+    public StatusProposta getStatus() {
+        return status;
+    }
+
+    public boolean isContraProposta() {
+        return propostaPai != null;
+    }
 }
