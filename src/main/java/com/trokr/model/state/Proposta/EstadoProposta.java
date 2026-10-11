@@ -4,17 +4,17 @@ import com.trokr.model.Proposta;
 
 public interface EstadoProposta {
 
-    void irParaRascunho(Proposta Proposta);
+    void irParaRascunho(Proposta proposta);
 
-    void irParaHomologacao(Proposta Proposta);
+    void irParaHomologacao(Proposta proposta);
 
-    void irParaAtiva(Proposta Proposta);
+    void irParaAtiva(Proposta proposta);
 
-    void irParaNegociado(Proposta Proposta);
+    void irParaNegociado(Proposta proposta);
 
-    void irParaFinalizado(Proposta Proposta);
+    void irParaFinalizado(Proposta proposta);
 
-    void irParaCancelado(Proposta Proposta);
+    void irParaCancelado(Proposta proposta);
 
     boolean isPodeMudar();
 }

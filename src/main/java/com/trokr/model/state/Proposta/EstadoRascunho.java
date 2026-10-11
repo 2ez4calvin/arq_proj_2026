@@ -5,33 +5,33 @@ import com.trokr.model.Proposta;
 public class EstadoRascunho implements EstadoProposta {
 
     @Override
-    public void irParaRascunho(Proposta Proposta) {
+    public void irParaRascunho(Proposta proposta) {
         throw new IllegalStateException("Já está como rascunho. Transição inválida");
     }
 
     @Override
-    public void irParaHomologacao(Proposta Proposta) {
-        Proposta.mudarEstadoPara(new EstadoHomologacao());
+    public void irParaHomologacao(Proposta proposta) {
+        proposta.mudarEstadoPara(new EstadoHomologacao());
     }
 
     @Override
-    public void irParaAtiva(Proposta Proposta) {
+    public void irParaAtiva(Proposta proposta) {
         throw new IllegalStateException("Transição Inválida!");
     }
 
     @Override
-    public void irParaNegociado(Proposta Proposta) {
+    public void irParaNegociado(Proposta proposta) {
         throw new IllegalStateException("Transição Inválida!");
     }
 
     @Override
-    public void irParaFinalizado(Proposta Proposta) {
+    public void irParaFinalizado(Proposta proposta) {
         throw new IllegalStateException("Transição Inválida!");
     }
 
     @Override
-    public void irParaCancelado(Proposta Proposta) {
-        Proposta.mudarEstadoPara(new EstadoCancelado());
+    public void irParaCancelado(Proposta proposta) {
+        proposta.mudarEstadoPara(new EstadoCancelado());
     }
 
     @Override

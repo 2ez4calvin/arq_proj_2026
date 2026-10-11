@@ -1,6 +1,6 @@
 package com.trokr.model;
 
-public enum Status {
+public enum StatusProposta {
 
     // Status das propostas
 

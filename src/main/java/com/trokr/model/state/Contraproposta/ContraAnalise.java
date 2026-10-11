@@ -5,34 +5,34 @@ import com.trokr.model.Proposta;
 public class ContraAnalise implements EstadoContraproposta{
 
     @Override
-    public void irParaRascunho(Proposta Proposta) {
-        Proposta.mudarEstadoPara(new ContraRascunho());
+    public void irParaRascunho(Proposta contraproposta) {
+        contraproposta.mudarEstadoPara(new ContraRascunho());
     }
 
     @Override
-    public void irParaEmAnalise(Proposta Proposta) {
+    public void irParaEmAnalise(Proposta contraproposta) {
 
         throw new IllegalStateException("Já está como Em análise. Transição inválida");
     }
 
     @Override
-    public void irParaNegociado(Proposta Proposta) {
-        Proposta.mudarEstadoPara(new ContraNegociado());
+    public void irParaNegociado(Proposta contraproposta) {
+        contraproposta.mudarEstadoPara(new ContraNegociado());
     }
 
     @Override
-    public void irParaFinalizado(Proposta Proposta) {
+    public void irParaFinalizado(Proposta contraproposta) {
         throw new IllegalStateException("Transição Inválida!");
     }
 
     @Override
-    public void irParaRecusado(Proposta Proposta) {
+    public void irParaRecusado(Proposta contraproposta) {
         throw new IllegalStateException("Transição Inválida!");
     }
 
     @Override
-    public void irParaCancelado(Proposta Proposta) {
-        Proposta.mudarEstadoPara(new ContraCancelado());
+    public void irParaCancelado(Proposta contraproposta) {
+        contraproposta.mudarEstadoPara(new ContraCancelado());
     }
 
     @Override

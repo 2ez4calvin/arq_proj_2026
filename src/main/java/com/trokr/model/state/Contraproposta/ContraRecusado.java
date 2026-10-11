@@ -5,32 +5,32 @@ import com.trokr.model.Proposta;
 public class ContraRecusado implements EstadoContraproposta {
 
     @Override
-    public void irParaRascunho(Proposta Proposta) {
+    public void irParaRascunho(Proposta contraproposta) {
         throw new IllegalStateException("Transição Inválida");
     }
 
     @Override
-    public void irParaEmAnalise(Proposta Proposta) {
+    public void irParaEmAnalise(Proposta contraproposta) {
         throw new IllegalStateException("Transição Inválida");
     }
 
     @Override
-    public void irParaNegociado(Proposta Proposta) {
+    public void irParaNegociado(Proposta contraproposta) {
         throw new IllegalStateException("Transição Inválida");
     }
 
     @Override
-    public void irParaFinalizado(Proposta Proposta) {
+    public void irParaFinalizado(Proposta contraproposta) {
         throw new IllegalStateException("Transição Inválida");
     }
 
     @Override
-    public void irParaRecusado(Proposta Proposta) {
+    public void irParaRecusado(Proposta contraproposta) {
         throw new IllegalStateException("Já está como Recusado. Transição inválida");
     }
 
     @Override
-    public void irParaCancelado(Proposta Proposta) {
+    public void irParaCancelado(Proposta contraproposta) {
         throw new IllegalStateException("Transição Inválida");
     }
 
