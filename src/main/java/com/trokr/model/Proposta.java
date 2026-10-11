@@ -7,6 +7,9 @@ import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import com.trokr.model.state.EstadoFactory;
+import com.trokr.model.state.Proposta.EstadoProposta;
+import com.trokr.model.state.Contraproposta.EstadoContraproposta;
 
 
 @Entity
@@ -15,7 +18,6 @@ import org.hibernate.annotations.CreationTimestamp;
 /*Removi o setter pois deixa qualquer um fazer setStatus, 
 independente do status. Alterar a lógica de status da proposta*/
 @NoArgsConstructor
-@AllArgsConstructor
 
 public class Proposta {
     
@@ -55,40 +57,35 @@ public class Proposta {
     @Transient
     private EstadoContraproposta estadoContraproposta;
 
+    //Construtores
     public Proposta(String titulo, String descricao, String tipo, Usuario usuario) {
         this.titulo = titulo;
         this.descricao = descricao;
         this.tipo = tipo;
         this.usuario = usuario;
-        carregarEstado(); // status já é rascunho de padrão, linha 37
+        carregarEstado(); // status já é rascunho de padrão
     }
 
     public static Proposta criarContraProposta(String descricao, Usuario autor, Proposta pai) {
         Proposta contra = new Proposta(pai.titulo, descricao, pai.tipo, autor);
         contra.propostaPai = pai;
+        contra.estadoProposta = null;
+        contra.carregarEstado();
         pai.contrapropostas.add(contra);
         return contra;
-    }
-
-    public StatusProposta getStatus() {
-        return status;
     }
 
     public boolean isContraProposta() {
         return propostaPai != null;
     }
 
-    @PostLoad
+    @PostLoad //Conversão do status do BD para um objeto utilizado no model
     private void carregarEstado() {
         if (isContraProposta()) {
             this.estadoContraproposta = EstadoFactory.contraPropostaDe(status);
         } else {
             this.estadoProposta = EstadoFactory.propostaDe(status);
         }
-    }
-
-    public boolean isContraProposta() {
-        return propostaPai != null;
     }
 
     public void mudarEstadoPara(EstadoProposta novoEstado) {

@@ -1,5 +1,6 @@
 package com.trokr.dto;
 
+import com.trokr.model.StatusProposta;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -22,5 +23,7 @@ public record PropostaRequestDTO(
 
         @NotNull(message = "tipo é obrigatório")
         String tipo
+
+        
 ) {
 }

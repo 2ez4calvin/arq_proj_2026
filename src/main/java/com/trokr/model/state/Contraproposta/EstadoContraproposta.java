@@ -1,6 +1,7 @@
-package com.trokr.model.state.Contraproposta;
+package com.trokr.model.state.contraproposta;
 
 import com.trokr.model.Proposta;
+import com.trokr.model.StatusProposta;
 
 public interface EstadoContraproposta {
 
@@ -17,4 +18,6 @@ public interface EstadoContraproposta {
     void irParaCancelado(Proposta contraproposta);
 
     boolean isPodeMudar();
+
+    StatusProposta getStatus();
 }

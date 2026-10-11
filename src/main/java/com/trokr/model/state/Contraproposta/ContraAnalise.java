@@ -1,6 +1,7 @@
-package com.trokr.model.state.Contraproposta;
+package com.trokr.model.state.contraproposta;
 
 import com.trokr.model.Proposta;
+import com.trokr.model.StatusProposta;
 
 public class ContraAnalise implements EstadoContraproposta{
 
@@ -38,6 +39,11 @@ public class ContraAnalise implements EstadoContraproposta{
     @Override
     public boolean isPodeMudar() {
         return true;
+    }
+
+    @Override
+    public StatusProposta getStatus() {
+        return StatusProposta.EM_ANALISE;
     }
 
 }

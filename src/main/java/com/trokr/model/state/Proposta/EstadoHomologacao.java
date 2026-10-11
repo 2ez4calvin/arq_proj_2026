@@ -1,6 +1,7 @@
-package com.trokr.model.state.Proposta;
+package com.trokr.model.state.proposta;
 
 import com.trokr.model.Proposta;
+import com.trokr.model.StatusProposta;
 
 public class EstadoHomologacao implements EstadoProposta {
 
@@ -37,5 +38,10 @@ public class EstadoHomologacao implements EstadoProposta {
     @Override
     public boolean isPodeMudar() {
         return true;
+    }
+
+    @Override
+    public StatusProposta getStatus() {
+        return StatusProposta.HOMOLOGACAO;
     }
 }

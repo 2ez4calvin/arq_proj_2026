@@ -1,6 +1,7 @@
-package com.trokr.model.state.Proposta;
+package com.trokr.model.state.proposta;
 
 import com.trokr.model.Proposta;
+import com.trokr.model.StatusProposta;
 
 public class EstadoNegociado implements EstadoProposta {
 
@@ -37,6 +38,11 @@ public class EstadoNegociado implements EstadoProposta {
     @Override
     public boolean isPodeMudar() {
         return true;
+    }
+
+    @Override
+    public StatusProposta getStatus() {
+        return StatusProposta.NEGOCIADO_RAIZ;
     }
 
 }

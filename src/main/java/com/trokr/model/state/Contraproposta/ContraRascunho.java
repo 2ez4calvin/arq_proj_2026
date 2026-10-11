@@ -1,6 +1,7 @@
-package com.trokr.model.state.Contraproposta;
+package com.trokr.model.state.contraproposta;
 
 import com.trokr.model.Proposta;
+import com.trokr.model.StatusProposta;
 
 public class ContraRascunho implements EstadoContraproposta {
 
@@ -41,4 +42,8 @@ public class ContraRascunho implements EstadoContraproposta {
         return true;
     }
 
+    @Override
+    public StatusProposta getStatus() {
+        return StatusProposta.RASCUNHO;
+    }
 }

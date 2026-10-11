@@ -1,4 +1,7 @@
-package com.trokr.model.state.Contraproposta;
+package com.trokr.model.state.contraproposta;
+
+import com.trokr.model.Proposta;
+import com.trokr.model.StatusProposta;
 
 public class ContraFinalizado implements EstadoContraproposta{
 
@@ -36,6 +39,11 @@ public class ContraFinalizado implements EstadoContraproposta{
     @Override
     public boolean isPodeMudar() {
         return false;
+    }
+
+    @Override
+    public StatusProposta getStatus() {
+        return StatusProposta.FINALIZADO_CONTRA;
     }
 
 }

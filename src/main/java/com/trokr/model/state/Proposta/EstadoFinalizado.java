@@ -1,6 +1,7 @@
-package com.trokr.model.state.Proposta;
+package com.trokr.model.state.proposta;
 
 import com.trokr.model.Proposta;
+import com.trokr.model.StatusProposta;
 
 public class EstadoFinalizado {
 
@@ -37,6 +38,11 @@ public class EstadoFinalizado {
     @Override
     public boolean isPodeMudar(){
         return false;
+    }
+
+    @Override
+    public StatusProposta getStatus() {
+        return StatusProposta.FINALIZADO;
     }
 
 }

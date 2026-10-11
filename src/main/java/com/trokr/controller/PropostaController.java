@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/itens")
+@RequestMapping("/propostas")
 @RequiredArgsConstructor
 public class PropostaController {
 
