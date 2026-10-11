@@ -13,20 +13,22 @@ public record PropostaResponseDTO(
         String titulo,
         String descricao,
         String tipo,
+        StatusProposta status,
         Long usuarioId,
         String usuarioNome,
-        LocalDateTime dataCriacao
-) {
+        Long propostaPaiId,
+        LocalDateTime dataCriacao) {
 
-    public static PropostaResponseDTO fromEntity(Proposta Proposta) {
+    public static PropostaResponseDTO fromEntity(Proposta proposta) {
         return new PropostaResponseDTO(
-                Proposta.getId(),
-                Proposta.getTitulo(),
-                Proposta.getDescricao(),
-                Proposta.getTipo(),
-                Proposta.getUsuarioProprietario().getId(),
-                Proposta.getUsuarioProprietario().getNome(),
-                Proposta.getDataCriacao()
-        );
+                proposta.getId(),
+                proposta.getTitulo(),
+                proposta.getDescricao(),
+                proposta.getTipo(),
+                proposta.getStatus(),
+                proposta.getUsuario().getId(),
+                proposta.getUsuario().getNome(),
+                proposta.isContraProposta() ? proposta.getPropostaPai().getId() : null,
+                proposta.getDataCriacao());
     }
 }

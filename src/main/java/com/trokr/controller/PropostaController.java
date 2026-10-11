@@ -16,65 +16,119 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class PropostaController {
 
-    private final PropostaService PropostaService;
+    private final PropostaService propostaService;
 
     @GetMapping
     public List<PropostaResponseDTO> listar() {
-        return PropostaService.listarTodos().stream()
+        return propostaService.listarTodos().stream()
                 .map(PropostaResponseDTO::fromEntity)
                 .toList();
     }
 
     @GetMapping("/{id}")
     public PropostaResponseDTO buscarPorId(@PathVariable Long id) {
-        return PropostaResponseDTO.fromEntity(PropostaService.buscarPorId(id));
+        return PropostaResponseDTO.fromEntity(propostaService.buscarPorId(id));
     }
 
     @GetMapping("/buscar")
-    public List<PropostaResponseDTO> listarPorTitulo(@RequestParam("titulo") String titulo){
-        return PropostaService.listarPorTitulo(titulo).stream()
+    public List<PropostaResponseDTO> listarPorTitulo(@RequestParam("titulo") String titulo) {
+        return propostaService.listarPorTitulo(titulo).stream()
                 .map(PropostaResponseDTO::fromEntity)
                 .toList();
     }
 
     @GetMapping("/buscar-tipo")
-    public List<PropostaResponseDTO> listarPorTipo(@RequestParam("tipo") String tipo){
-        return PropostaService.listarPorTipo(tipo).stream()
+    public List<PropostaResponseDTO> listarPorTipo(@RequestParam("tipo") String tipo) {
+        return propostaService.listarPorTipo(tipo).stream()
                 .map(PropostaResponseDTO::fromEntity)
                 .toList();
     }
 
-    @GetMapping("/buscar-itens-usuario/{id}")
-    public List<PropostaResponseDTO> listarPorProprietario(@PathVariable Long id){
-        return PropostaService.listarPorUsuarioProprietario(id).stream()
+    @GetMapping("/usuario/{id}")
+    public List<PropostaResponseDTO> listarPorUsuario(@PathVariable Long id) {
+        return propostaService.listarPorUsuario(id).stream()
                 .map(PropostaResponseDTO::fromEntity)
                 .toList();
     }
 
     @PostMapping
     public ResponseEntity<PropostaResponseDTO> criar(@Valid @RequestBody PropostaRequestDTO dto) {
-        Proposta Proposta = new Proposta();
-        Proposta.setTitulo(dto.titulo());
-        Proposta.setDescricao(dto.descricao());
-        Proposta.setTipo(dto.tipo());
-
-        Proposta salvo = PropostaService.criar(Proposta, dto.usuarioId());
-        return ResponseEntity.status(HttpStatus.CREATED).body(PropostaResponseDTO.fromEntity(salvo));
+        Proposta salva = propostaService.criar(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(PropostaResponseDTO.fromEntity(salva));
     }
 
     @PutMapping("/{id}")
     public PropostaResponseDTO atualizar(@PathVariable Long id, @Valid @RequestBody PropostaRequestDTO dto) {
-        Proposta dadosAtualizados = new Proposta();
-        dadosAtualizados.setTitulo(dto.titulo());
-        dadosAtualizados.setDescricao(dto.descricao());
-        dadosAtualizados.setTipo(dto.tipo());
-
-        return PropostaResponseDTO.fromEntity(PropostaService.atualizar(id, dadosAtualizados, dto.usuarioId()));
+        return PropostaResponseDTO.fromEntity(propostaService.atualizar(id, dto));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> remover(@PathVariable Long id) {
-        PropostaService.remover(id);
+        propostaService.remover(id);
         return ResponseEntity.noContent().build();
+    }
+
+    // Mudanças de Estado de proposta
+
+    @PatchMapping("proposta/{id}/homologar")
+    public PropostaResponseDTO homologar(@PathVariable Long id) {
+        return PropostaResponseDTO.fromEntity(propostaService.irParaHomologacao(id));
+    }
+
+    @PatchMapping("proposta/{id}/ativar")
+    public PropostaResponseDTO ativar(@PathVariable Long id) {
+        return PropostaResponseDTO.fromEntity(propostaService.irParaAtiva(id));
+    }
+
+    @PatchMapping("proposta/{id}/cancelar")
+    public PropostaResponseDTO cancelar(@PathVariable Long id) {
+        return PropostaResponseDTO.fromEntity(propostaService.irParaCancelado(id));
+    }
+
+    @PatchMapping("proposta/{id}/rascunho")
+    public PropostaResponseDTO rascunho(@PathVariable Long id) {
+        return PropostaResponseDTO.fromEntity(propostaService.irParaRascunho(id));
+    }
+
+    @PatchMapping("proposta/{id}/negociar")
+    public PropostaResponseDTO negociar(@PathVariable Long id) {
+        return PropostaResponseDTO.fromEntity(propostaService.irParaNegociado(id));
+    }
+
+    @PatchMapping("proposta/{id}/finalizar")
+    public PropostaResponseDTO finalizar(@PathVariable Long id) {
+        return PropostaResponseDTO.fromEntity(propostaService.irParaFinalizado(id));
+    }
+
+    // Mudanças de Estado de contraproposta
+
+    @PatchMapping("contraproposta/{id}/rascunho")
+    public PropostaResponseDTO contraRascunho(@PathVariable Long id) {
+        return PropostaResponseDTO.fromEntity(propostaService.irParaRascunho(id));
+    }
+
+    @PatchMapping("contraproposta/{id}/analisar")
+    public PropostaResponseDTO contraAnalisar(@PathVariable Long id) {
+        return PropostaResponseDTO.fromEntity(propostaService.contraEmAnalise(id));
+    }
+
+    @PatchMapping("contraproposta/{id}/cancelar")
+    public PropostaResponseDTO contraCancelar(@PathVariable Long id) {
+        return PropostaResponseDTO.fromEntity(propostaService.contraCancelar(id));
+    }
+
+    @PatchMapping("contraproposta/{id}/finalizar")
+    public PropostaResponseDTO contraFinalizar(@PathVariable Long id) {
+        return PropostaResponseDTO.fromEntity(propostaService.contraFinalizar(id));
+    }
+
+    @PatchMapping("contraproposta/{id}/negociar")
+    public PropostaResponseDTO contraNegociar(@PathVariable Long id) {
+        return PropostaResponseDTO.fromEntity(propostaService.contraNegociar(id));
+    }
+
+    @PatchMapping("contraproposta/{id}/cancelar")
+    public PropostaResponseDTO contraRecusar(@PathVariable Long id) {
+        return PropostaResponseDTO.fromEntity(propostaService.contraRecusar(id));
     }
 }

@@ -8,6 +8,6 @@ public interface PropostaRepository extends JpaRepository<Proposta, Long> {
 
     List<Proposta> findByTituloContainingIgnoreCase(String titulo);
     List<Proposta> findByTipoIgnoreCase(String tipo);
-    List<Proposta> findByUsuarioProprietarioId(Long usuarioId);
+    List<Proposta> findByUsuarioId(Long usuarioId);
     
 }
