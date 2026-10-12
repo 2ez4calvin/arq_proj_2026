@@ -44,3 +44,11 @@ Thumbs.db
 .claude
 CLAUDE.md
 AGENTS.md
+
+### Compilação da IDE
+
+bin/
+target/
+.classpath
+.project
+.settings/

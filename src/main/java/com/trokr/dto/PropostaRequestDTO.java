@@ -17,7 +17,7 @@ public record PropostaRequestDTO(
         @NotBlank(message = "descricao é obrigatória")
         String descricao,
 
-        @NotBlank (message = "usuarioId é obrigatório")
+        @NotNull (message = "usuarioId é obrigatório")
         Long usuarioId,
 
         @NotNull(message = "tipo é obrigatório")

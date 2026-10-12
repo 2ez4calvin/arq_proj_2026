@@ -7,7 +7,7 @@ import com.trokr.model.Proposta;
 import com.trokr.model.StatusProposta;
 import com.trokr.model.Usuario;
 import com.trokr.repository.PropostaRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -83,7 +83,6 @@ public class PropostaService {
     }
 
     // Mudanças de Estado de proposta
-
     @Transactional
     public Proposta irParaRascunho(Long id) {
         Proposta proposta = buscarPorId(id);
@@ -127,6 +126,12 @@ public class PropostaService {
     }
 
     // Mudanças de Estado para contraproposta
+    @Transactional
+    public Proposta contraRascunho(Long id) {
+        Proposta contra = buscarPorId(id);
+        contra.contraIrParaRascunho();
+        return contra;
+    }
 
     @Transactional
     public Proposta contraEmAnalise(Long id) {

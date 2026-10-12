@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.trokr.dto.ContrapropostaRequestDTO;
 
 @RestController
 @RequestMapping("/propostas")
@@ -57,6 +58,19 @@ public class PropostaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(PropostaResponseDTO.fromEntity(salva));
     }
 
+    @PostMapping("/{id}/contrapropostas")
+    public ResponseEntity<PropostaResponseDTO> criarContraproposta(
+            @PathVariable Long id, @Valid @RequestBody ContrapropostaRequestDTO dto) {
+        Proposta contra = propostaService.criarContraproposta(id, dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(PropostaResponseDTO.fromEntity(contra));
+    }
+
+    @GetMapping("/{id}/contrapropostas")
+    public List<PropostaResponseDTO> listarContrapropostas(@PathVariable Long id) {
+        return propostaService.listarContrapropostas(id).stream()
+                .map(PropostaResponseDTO::fromEntity).toList();
+    }
+
     @PutMapping("/{id}")
     public PropostaResponseDTO atualizar(@PathVariable Long id, @Valid @RequestBody PropostaRequestDTO dto) {
         return PropostaResponseDTO.fromEntity(propostaService.atualizar(id, dto));
@@ -69,39 +83,37 @@ public class PropostaController {
     }
 
     // Mudanças de Estado de proposta
-
-    @PatchMapping("proposta/{id}/homologar")
+    @PatchMapping("/{id}/homologar")
     public PropostaResponseDTO homologar(@PathVariable Long id) {
         return PropostaResponseDTO.fromEntity(propostaService.irParaHomologacao(id));
     }
 
-    @PatchMapping("proposta/{id}/ativar")
+    @PatchMapping("/{id}/ativar")
     public PropostaResponseDTO ativar(@PathVariable Long id) {
         return PropostaResponseDTO.fromEntity(propostaService.irParaAtiva(id));
     }
 
-    @PatchMapping("proposta/{id}/cancelar")
+    @PatchMapping("/{id}/cancelar")
     public PropostaResponseDTO cancelar(@PathVariable Long id) {
         return PropostaResponseDTO.fromEntity(propostaService.irParaCancelado(id));
     }
 
-    @PatchMapping("proposta/{id}/rascunho")
+    @PatchMapping("/{id}/rascunho")
     public PropostaResponseDTO rascunho(@PathVariable Long id) {
         return PropostaResponseDTO.fromEntity(propostaService.irParaRascunho(id));
     }
 
-    @PatchMapping("proposta/{id}/negociar")
+    @PatchMapping("/{id}/negociar")
     public PropostaResponseDTO negociar(@PathVariable Long id) {
         return PropostaResponseDTO.fromEntity(propostaService.irParaNegociado(id));
     }
 
-    @PatchMapping("proposta/{id}/finalizar")
+    @PatchMapping("/{id}/finalizar")
     public PropostaResponseDTO finalizar(@PathVariable Long id) {
         return PropostaResponseDTO.fromEntity(propostaService.irParaFinalizado(id));
     }
 
     // Mudanças de Estado de contraproposta
-
     @PatchMapping("contraproposta/{id}/rascunho")
     public PropostaResponseDTO contraRascunho(@PathVariable Long id) {
         return PropostaResponseDTO.fromEntity(propostaService.irParaRascunho(id));
@@ -127,7 +139,7 @@ public class PropostaController {
         return PropostaResponseDTO.fromEntity(propostaService.contraNegociar(id));
     }
 
-    @PatchMapping("contraproposta/{id}/cancelar")
+    @PatchMapping("contraproposta/{id}/recusar")
     public PropostaResponseDTO contraRecusar(@PathVariable Long id) {
         return PropostaResponseDTO.fromEntity(propostaService.contraRecusar(id));
     }

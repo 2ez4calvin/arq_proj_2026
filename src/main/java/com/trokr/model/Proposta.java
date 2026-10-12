@@ -8,8 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import com.trokr.model.state.EstadoFactory;
-import com.trokr.model.state.Proposta.EstadoProposta;
-import com.trokr.model.state.Contraproposta.EstadoContraproposta;
+import com.trokr.model.state.proposta.EstadoProposta;
+import com.trokr.model.state.contraproposta.EstadoContraproposta;
 
 @Entity
 @Table(name = "proposta")
@@ -119,7 +119,6 @@ public class Proposta {
     }
 
     // ESTADOS DE PROPOSTA
-
     public void irParaRascunho() {
         exigirRaiz();
         estadoProposta.irParaRascunho(this);
@@ -151,6 +150,10 @@ public class Proposta {
     }
 
     // ESTADOS DE CONTRAPROPOSTA
+    public void contraIrParaRascunho() {
+        exigirContra();
+        estadoContraproposta.irParaRascunho(this);
+    }
 
     public void contraIrParaEmAnalise() {
         exigirContra();
@@ -179,14 +182,15 @@ public class Proposta {
 
     // Camada de segurança extra, que evita nullpointerexception caso contra chame
     // um estado de proposta e vice-versa.
-
     private void exigirRaiz() {
-        if (isContraProposta())
+        if (isContraProposta()) {
             throw new IllegalStateException("Operação válida apenas para Proposta");
+        }
     }
 
     private void exigirContra() {
-        if (!isContraProposta())
+        if (!isContraProposta()) {
             throw new IllegalStateException("Operação válida apenas para Contraproposta");
+        }
     }
 }

@@ -1,6 +1,6 @@
 package com.trokr.model.state;
 
-import com.trokr.model.statusProposta;
+import com.trokr.model.StatusProposta;
 import com.trokr.model.state.proposta.*;
 import com.trokr.model.state.contraproposta.*;
 
@@ -21,12 +21,12 @@ public class EstadoFactory {
 
     public static EstadoContraproposta contraPropostaDe(StatusProposta status) {
         return switch (status) {
-            case RASCUNHO          -> new EstadoContraRascunho();
-            case EM_ANALISE        -> new EstadoContraEmAnalise();
-            case NEGOCIADO_CONTRA  -> new EstadoContraNegociado();
-            case FINALIZADO_CONTRA -> new EstadoContraFinalizado();
-            case RECUSADO          -> new EstadoContraRecusado();
-            case CANCELADO_CONTRA  -> new EstadoContraCancelado();
+            case RASCUNHO          -> new ContraRascunho();
+            case EM_ANALISE        -> new ContraAnalise();
+            case NEGOCIADO_CONTRA  -> new ContraNegociado();
+            case FINALIZADO_CONTRA -> new ContraFinalizado();
+            case RECUSADO          -> new ContraRecusado();
+            case CANCELADO_CONTRA  -> new ContraCancelado();
             default -> throw new IllegalArgumentException(
                 "Status " + status + " não pertence a Contraproposta");
         };

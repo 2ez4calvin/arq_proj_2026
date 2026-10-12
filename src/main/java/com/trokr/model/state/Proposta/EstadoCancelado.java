@@ -3,7 +3,7 @@ package com.trokr.model.state.proposta;
 import com.trokr.model.Proposta;
 import com.trokr.model.StatusProposta;
 
-public class EstadoCancelado {
+public class EstadoCancelado implements EstadoProposta{
 
     @Override
     public void irParaRascunho(Proposta proposta) {
