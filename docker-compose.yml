@@ -4,8 +4,6 @@ services:
     container_name: trokr-db
     restart: unless-stopped
     environment:
-      # Valores de exemplo para desenvolvimento local — nunca use senhas
-      # assim fora do ambiente local da disciplina.
       POSTGRES_DB: trokr_db
       POSTGRES_USER: trokr_user
       POSTGRES_PASSWORD: changeme_local_dev
@@ -19,6 +17,24 @@ services:
       timeout: 5s
       retries: 5
 
+  mongo:
+    image: mongo:7
+    container_name: trokr-mongo
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: trokr_mongo
+      MONGO_INITDB_ROOT_PASSWORD: changeme_local_dev
+    ports:
+      - "27017:27017"
+    volumes:
+      - trokr-mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
   app:
     build: .
     container_name: trokr-app
@@ -26,18 +42,20 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      mongo:
+        condition: service_healthy
     environment:
       DB_HOST: db
       DB_PORT: 5432
       DB_NAME: trokr_db
       DB_USER: trokr_user
       DB_PASSWORD: changeme_local_dev
+      MONGO_HOST: mongo
+      MONGO_PORT: 27017
+      MONGO_USER: trokr_mongo
+      MONGO_PASSWORD: changeme_local_dev
     ports:
       - "8090:8080"
-    # Usado por `docker compose watch`: ao salvar um arquivo em src/ ou o
-    # pom.xml, o Compose reconstrói a imagem e recria o container sozinho,
-    # aproveitando o cache de camadas (as dependências já baixadas não são
-    # rebaixadas). Evita o ciclo manual de `down` + `up --build`.
     develop:
       watch:
         - action: rebuild
@@ -47,3 +65,4 @@ services:
 
 volumes:
   trokr-db-data:
+  trokr-mongo-data:

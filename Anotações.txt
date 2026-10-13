@@ -1,0 +1,11 @@
+docker compose exec mongo mongosh -u trokr_mongo -p changeme_local_dev --authenticationDatabase admin
+
+use trokr_logs
+db.log_evento.find()
+
+Aula dia 29/09 - Implementar uma Strategy por classe
+
+Pensar em quanto vale cada categoria e o que avaliar em cada uma delas (Ex: Qualidade do item, raridade, qualidade xp, qualidade do serviço, rapidez, etc. 
+Quantizar essas metricas em um número para o ganho de créditos)
+
+Documentar Facade no PropostaService, de acordo com o Slide
