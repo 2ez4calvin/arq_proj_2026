@@ -28,7 +28,7 @@ public class ContraAnalise implements EstadoContraproposta{
 
     @Override
     public void irParaRecusado(Proposta contraproposta) {
-        throw new IllegalStateException("Transição Inválida!");
+        contraproposta.mudarEstadoPara(new ContraRecusado());
     }
 
     @Override

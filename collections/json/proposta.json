@@ -1,0 +1,1449 @@
+{
+  "info": {
+    "name": "Trokr - Propostas e Contrapropostas",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Rode a collection inteira no Collection Runner, na ordem. Ajuste donoId e autorId para dois usuarios existentes e diferentes."
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8090"
+    },
+    {
+      "key": "donoId",
+      "value": "1"
+    },
+    {
+      "key": "autorId",
+      "value": "2"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Proposta - CRUD e consultas",
+      "item": [
+        {
+          "name": "Criar proposta (RASCUNHO)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/propostas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Bicicleta\",\n  \"descricao\": \"Troco por violao\",\n  \"tipo\": \"troca\",\n  \"usuarioId\": {{donoId}}\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 201', () => pm.response.to.have.status(201));",
+                  "pm.test('status = RASCUNHO', () => pm.expect(pm.response.json().status).to.eql('RASCUNHO'));",
+                  "pm.collectionVariables.set('propostaId', pm.response.json().id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Criar proposta sem titulo (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/propostas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"\",\n  \"descricao\": \"x\",\n  \"tipo\": \"troca\",\n  \"usuarioId\": {{donoId}}\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 400', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Buscar por id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/propostas/{{propostaId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas",
+                "{{propostaId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('status = RASCUNHO', () => pm.expect(pm.response.json().status).to.eql('RASCUNHO'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Buscar id inexistente (404)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/propostas/999999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas",
+                "999999"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 404', () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Listar todas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/propostas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Buscar por titulo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/propostas/buscar?titulo=bici",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas",
+                "buscar"
+              ],
+              "query": [
+                {
+                  "key": "titulo",
+                  "value": "bici"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Buscar por tipo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/propostas/buscar-tipo?tipo=troca",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas",
+                "buscar-tipo"
+              ],
+              "query": [
+                {
+                  "key": "tipo",
+                  "value": "troca"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Listar por usuario",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/propostas/usuario/{{donoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas",
+                "usuario",
+                "{{donoId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Atualizar em RASCUNHO",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/propostas/{{propostaId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas",
+                "{{propostaId}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Bicicleta aro 29\",\n  \"descricao\": \"Troco por violao\",\n  \"tipo\": \"troca\",\n  \"usuarioId\": {{donoId}}\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('status = RASCUNHO', () => pm.expect(pm.response.json().status).to.eql('RASCUNHO'));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "2. Proposta - ciclo de estados",
+      "item": [
+        {
+          "name": "Finalizar em RASCUNHO (409 transicao invalida)",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/propostas/{{propostaId}}/finalizar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas",
+                "{{propostaId}}",
+                "finalizar"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 409', () => pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Ativar em RASCUNHO (409 transicao invalida)",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/propostas/{{propostaId}}/ativar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas",
+                "{{propostaId}}",
+                "ativar"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 409', () => pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "RASCUNHO -> HOMOLOGACAO",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/propostas/{{propostaId}}/homologar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas",
+                "{{propostaId}}",
+                "homologar"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('status = HOMOLOGACAO', () => pm.expect(pm.response.json().status).to.eql('HOMOLOGACAO'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Atualizar fora de RASCUNHO (409)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/propostas/{{propostaId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas",
+                "{{propostaId}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"x\",\n  \"descricao\": \"x\",\n  \"tipo\": \"troca\",\n  \"usuarioId\": {{donoId}}\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 409', () => pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "HOMOLOGACAO -> RASCUNHO",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/propostas/{{propostaId}}/rascunho",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas",
+                "{{propostaId}}",
+                "rascunho"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('status = RASCUNHO', () => pm.expect(pm.response.json().status).to.eql('RASCUNHO'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "RASCUNHO -> HOMOLOGACAO (de novo)",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/propostas/{{propostaId}}/homologar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas",
+                "{{propostaId}}",
+                "homologar"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('status = HOMOLOGACAO', () => pm.expect(pm.response.json().status).to.eql('HOMOLOGACAO'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Homologar de novo (409)",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/propostas/{{propostaId}}/homologar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas",
+                "{{propostaId}}",
+                "homologar"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 409', () => pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "HOMOLOGACAO -> ATIVA",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/propostas/{{propostaId}}/ativar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas",
+                "{{propostaId}}",
+                "ativar"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('status = ATIVA', () => pm.expect(pm.response.json().status).to.eql('ATIVA'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Recarregar do banco (testa @PostLoad)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/propostas/{{propostaId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas",
+                "{{propostaId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('status = ATIVA', () => pm.expect(pm.response.json().status).to.eql('ATIVA'));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "3. Contraproposta - criacao e regras",
+      "item": [
+        {
+          "name": "Dono contrapropor a propria proposta (409)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/propostas/{{propostaId}}/contrapropostas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas",
+                "{{propostaId}}",
+                "contrapropostas"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"descricao\": \"x\",\n  \"usuarioId\": {{donoId}}\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 409', () => pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Criar contraproposta (RASCUNHO)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/propostas/{{propostaId}}/contrapropostas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas",
+                "{{propostaId}}",
+                "contrapropostas"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"descricao\": \"Ofereco um violao e um fone\",\n  \"usuarioId\": {{autorId}}\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 201', () => pm.response.to.have.status(201));",
+                  "pm.test('status = RASCUNHO', () => pm.expect(pm.response.json().status).to.eql('RASCUNHO'));",
+                  "pm.collectionVariables.set('contraId', pm.response.json().id);",
+                  "pm.test('tem propostaPaiId', () => pm.expect(pm.response.json().propostaPaiId).to.eql(Number(pm.collectionVariables.get('propostaId'))));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Listar contrapropostas da proposta",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/propostas/{{propostaId}}/contrapropostas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas",
+                "{{propostaId}}",
+                "contrapropostas"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Usar endpoint de proposta numa contra (409)",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/propostas/{{contraId}}/ativar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas",
+                "{{contraId}}",
+                "ativar"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 409', () => pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Usar endpoint de contra numa proposta (409)",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/propostas/contraproposta/{{propostaId}}/analisar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas",
+                "contraproposta",
+                "{{propostaId}}",
+                "analisar"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 409', () => pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Negociar contra ainda em RASCUNHO (409)",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/propostas/contraproposta/{{contraId}}/negociar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas",
+                "contraproposta",
+                "{{contraId}}",
+                "negociar"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 409', () => pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "4. Contraproposta - aceitar (analisar > negociar > finalizar)",
+      "item": [
+        {
+          "name": "RASCUNHO -> EM_ANALISE",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/propostas/contraproposta/{{contraId}}/analisar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas",
+                "contraproposta",
+                "{{contraId}}",
+                "analisar"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('status = EM_ANALISE', () => pm.expect(pm.response.json().status).to.eql('EM_ANALISE'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "EM_ANALISE -> NEGOCIADO_CONTRA",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/propostas/contraproposta/{{contraId}}/negociar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas",
+                "contraproposta",
+                "{{contraId}}",
+                "negociar"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('status = NEGOCIADO_CONTRA', () => pm.expect(pm.response.json().status).to.eql('NEGOCIADO_CONTRA'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "NEGOCIADO_CONTRA -> FINALIZADO_CONTRA",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/propostas/contraproposta/{{contraId}}/finalizar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas",
+                "contraproposta",
+                "{{contraId}}",
+                "finalizar"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('status = FINALIZADO_CONTRA', () => pm.expect(pm.response.json().status).to.eql('FINALIZADO_CONTRA'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Cancelar contra finalizada (409)",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/propostas/contraproposta/{{contraId}}/cancelar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas",
+                "contraproposta",
+                "{{contraId}}",
+                "cancelar"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 409', () => pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "5. Contraproposta - recusar",
+      "item": [
+        {
+          "name": "Criar contraproposta 2",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/propostas/{{propostaId}}/contrapropostas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas",
+                "{{propostaId}}",
+                "contrapropostas"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"descricao\": \"Ofereco um violao e um fone\",\n  \"usuarioId\": {{autorId}}\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 201', () => pm.response.to.have.status(201));",
+                  "pm.test('status = RASCUNHO', () => pm.expect(pm.response.json().status).to.eql('RASCUNHO'));",
+                  "pm.collectionVariables.set('contraId2', pm.response.json().id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Recusar em RASCUNHO (409)",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/propostas/contraproposta/{{contraId2}}/recusar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas",
+                "contraproposta",
+                "{{contraId2}}",
+                "recusar"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 409', () => pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "RASCUNHO -> EM_ANALISE",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/propostas/contraproposta/{{contraId2}}/analisar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas",
+                "contraproposta",
+                "{{contraId2}}",
+                "analisar"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('status = EM_ANALISE', () => pm.expect(pm.response.json().status).to.eql('EM_ANALISE'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "EM_ANALISE -> RECUSADO",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/propostas/contraproposta/{{contraId2}}/recusar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas",
+                "contraproposta",
+                "{{contraId2}}",
+                "recusar"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('status = RECUSADO', () => pm.expect(pm.response.json().status).to.eql('RECUSADO'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Negociar contra recusada (409)",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/propostas/contraproposta/{{contraId2}}/negociar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas",
+                "contraproposta",
+                "{{contraId2}}",
+                "negociar"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 409', () => pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "6. Contraproposta - cancelar",
+      "item": [
+        {
+          "name": "Criar contraproposta 3",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/propostas/{{propostaId}}/contrapropostas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas",
+                "{{propostaId}}",
+                "contrapropostas"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"descricao\": \"Ofereco um violao e um fone\",\n  \"usuarioId\": {{autorId}}\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 201', () => pm.response.to.have.status(201));",
+                  "pm.test('status = RASCUNHO', () => pm.expect(pm.response.json().status).to.eql('RASCUNHO'));",
+                  "pm.collectionVariables.set('contraId3', pm.response.json().id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "RASCUNHO -> CANCELADO_CONTRA",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/propostas/contraproposta/{{contraId3}}/cancelar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas",
+                "contraproposta",
+                "{{contraId3}}",
+                "cancelar"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('status = CANCELADO_CONTRA', () => pm.expect(pm.response.json().status).to.eql('CANCELADO_CONTRA'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Analisar contra cancelada (409)",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/propostas/contraproposta/{{contraId3}}/analisar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas",
+                "contraproposta",
+                "{{contraId3}}",
+                "analisar"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 409', () => pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "7. Proposta - negociar, finalizar, cancelar, remover",
+      "item": [
+        {
+          "name": "ATIVA -> NEGOCIADO_RAIZ",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/propostas/{{propostaId}}/negociar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas",
+                "{{propostaId}}",
+                "negociar"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('status = NEGOCIADO_RAIZ', () => pm.expect(pm.response.json().status).to.eql('NEGOCIADO_RAIZ'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "NEGOCIADO_RAIZ -> FINALIZADO",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/propostas/{{propostaId}}/finalizar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas",
+                "{{propostaId}}",
+                "finalizar"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('status = FINALIZADO', () => pm.expect(pm.response.json().status).to.eql('FINALIZADO'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Cancelar proposta finalizada (409)",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/propostas/{{propostaId}}/cancelar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas",
+                "{{propostaId}}",
+                "cancelar"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 409', () => pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Criar proposta B (para cancelar)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/propostas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Violao\",\n  \"descricao\": \"Troco por violao\",\n  \"tipo\": \"troca\",\n  \"usuarioId\": {{donoId}}\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 201', () => pm.response.to.have.status(201));",
+                  "pm.test('status = RASCUNHO', () => pm.expect(pm.response.json().status).to.eql('RASCUNHO'));",
+                  "pm.collectionVariables.set('propostaId2', pm.response.json().id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "RASCUNHO -> CANCELADO_RAIZ",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/propostas/{{propostaId2}}/cancelar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas",
+                "{{propostaId2}}",
+                "cancelar"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('status = CANCELADO_RAIZ', () => pm.expect(pm.response.json().status).to.eql('CANCELADO_RAIZ'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Homologar proposta cancelada (409)",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/propostas/{{propostaId2}}/homologar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas",
+                "{{propostaId2}}",
+                "homologar"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 409', () => pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Remover proposta B (204)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/propostas/{{propostaId2}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas",
+                "{{propostaId2}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 204', () => pm.response.to.have.status(204));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Buscar proposta B removida (404)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/propostas/{{propostaId2}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propostas",
+                "{{propostaId2}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 404', () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
