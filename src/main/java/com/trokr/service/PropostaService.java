@@ -6,11 +6,15 @@ import com.trokr.exception.ResourceNotFoundException;
 import com.trokr.model.Proposta;
 import com.trokr.model.StatusProposta;
 import com.trokr.model.Usuario;
+import com.trokr.model.event.TrocaConcluidaEvent;
 import com.trokr.repository.PropostaRepository;
 import org.springframework.transaction.annotation.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.context.ApplicationEventPublisher;
+
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +22,7 @@ public class PropostaService {
 
     private final PropostaRepository propostaRepository;
     private final UsuarioService usuarioService;
+    private final ApplicationEventPublisher eventPublisher;
 
     public List<Proposta> listarTodos() {
         return propostaRepository.findAll();
@@ -122,6 +127,7 @@ public class PropostaService {
     public Proposta irParaFinalizado(Long id) {
         Proposta proposta = buscarPorId(id);
         proposta.irParaFinalizado();
+        publicarSeTrocaConcluida(proposta);
         return proposta;
     }
 
@@ -151,6 +157,7 @@ public class PropostaService {
     public Proposta contraFinalizar(Long id) {
         Proposta contra = buscarPorId(id);
         contra.contraIrParaFinalizado();
+        publicarSeTrocaConcluida(contra);
         return contra;
     }
 
@@ -166,5 +173,41 @@ public class PropostaService {
         Proposta contra = buscarPorId(id);
         contra.contraIrParaCancelado();
         return contra;
+    }
+     private void publicarSeTrocaConcluida(Proposta alterada) {
+        Proposta raiz;
+        Proposta contra;
+ 
+        if (alterada.isContraProposta()) {
+            raiz = alterada.getPropostaPai();
+            contra = alterada;
+            if (raiz.getStatus() == StatusProposta.FINALIZADO) {
+                return;
+            }
+        } else {
+            raiz = alterada;
+            boolean contraJaFinalizou = raiz.getContrapropostas().stream()
+                    .anyMatch(c -> c.getStatus() == StatusProposta.FINALIZADO_CONTRA);
+            if (contraJaFinalizou) {
+                return; 
+            }
+            contra = raiz.getContrapropostas().stream()
+                    .filter(c -> c.getStatus() == StatusProposta.NEGOCIADO_CONTRA)
+                    .findFirst()
+                    .orElse(null);
+            if (contra == null) {
+                return;
+            }
+        }
+ 
+        eventPublisher.publishEvent(construirEventoDeTrocaConcluida(raiz, contra));
+    }
+ 
+    private TrocaConcluidaEvent construirEventoDeTrocaConcluida(Proposta raiz, Proposta contra) {
+        return new TrocaConcluidaEvent(
+                raiz.getId(),
+                raiz.getUsuario(),
+                contra.getUsuario(),
+                LocalDateTime.now());
     }
 }

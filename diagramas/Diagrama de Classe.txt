@@ -30,6 +30,7 @@ class Avaliacao {
 	proposta: Proposta
 	usuarioAlvo: Usuario
 	usuarioAutor: Usuario
+	status: StatusAvaliacao
 	--
 	Avaliacao()
 	Avaliacao(int, String, Proposta, Usuario, Usuario)
@@ -48,6 +49,8 @@ class Avaliacao {
 	setUsuarioAlvo(Usuario): void
 	getUsuarioAutor(): Usuario
 	setUsuarioAutor(Usuario): void
+	getStatus(): StatusAvaliacao
+	setStatus(StatusAvaliacao): void
 }
 
 class Proposta {
@@ -110,7 +113,7 @@ class Historico {
 	setUsuario(Usuario): void
 }
 
-enum Status {
+enum StatusProposta {
 	RASCUNHO
 	HOMOLOGACAO
 	ATIVA
@@ -121,6 +124,11 @@ enum Status {
 	RECUSADO
 }
 
+enum StatusAvaliacao {
+	PENDENTE
+	AVALIADA
+}
+
 ' Relacionamentos
 Usuario "1" --> "*" Proposta : propõe
 Usuario "1" --> "*" Avaliacao : autor
@@ -128,5 +136,6 @@ Usuario "1" --> "*" Avaliacao : alvo
 Proposta "0..1" --> "*" Proposta : Contraproposta
 Proposta "1" --> "*" Historico : gera
 Proposta "1" --> "*" Avaliacao : recebe
+
 
 @enduml
