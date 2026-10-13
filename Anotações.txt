@@ -7,6 +7,8 @@ Inserir tipo em proposta com ENUM (serviço, item, produto, etc, etc)
 
 Verificar Casos extremos (Várias contrapropostas, se quando uma é aceita, as outras vão para o status de cancelado)
 
+Listener de quando uma proposta pai for finalizada, cancelar as outras
+
 Alerta de avaliação pendente (Pensar em algo)
 
 Ver implementação de mailbox dentro do docker (Igual no id)
