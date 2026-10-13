@@ -3,6 +3,14 @@ docker compose exec mongo mongosh -u trokr_mongo -p changeme_local_dev --authent
 use trokr_logs
 db.log_evento.find()
 
+Inserir tipo em proposta com ENUM (serviço, item, produto, etc, etc)
+
+Verificar Casos extremos (Várias contrapropostas, se quando uma é aceita, as outras vão para o status de cancelado)
+
+Alerta de avaliação pendente (Pensar em algo)
+
+Ver implementação de mailbox dentro do docker (Igual no id)
+
 Aula dia 29/09 - Implementar uma Strategy por classe
 
 Pensar em quanto vale cada categoria e o que avaliar em cada uma delas (Ex: Qualidade do item, raridade, qualidade xp, qualidade do serviço, rapidez, etc. 
