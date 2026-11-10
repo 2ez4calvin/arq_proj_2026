@@ -34,3 +34,13 @@ management:
         # Expor só o necessário nesta fase: health (usado como /health do
         # enunciado) e info. Nada de segurança/autenticação em cima disso ainda.
         include: health,info
+
+  springdoc:
+    api-docs:
+      path: /v3/api-docs
+    swagger-ui:
+      path: /swagger-ui.html
+      tags-sorter: alpha
+      operations-sorter: method
+      try-it-out-enabled: true
+      display-request-duration: true
